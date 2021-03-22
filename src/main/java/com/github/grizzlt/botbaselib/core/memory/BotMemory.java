@@ -52,14 +52,18 @@ public class BotMemory
         if (isPersistent) {
             entry = this.persistentMemoryMap.get(key);
             if (entry == null) {
+                System.out.println("Before factory get!");
                 Entry<T> newEntry = new Entry<>(defaultFactory.get());
+                System.out.println("After factory get!");
                 this.persistentMemoryMap.put(key, newEntry);
                 return newEntry;
             }
         } else {
             entry = this.dynamicMemoryMap.get(key);
             if (entry == null) {
+                System.out.println("Before factory get!(non-persistent)");
                 Entry<T> newEntry = new Entry<>(defaultFactory.get());
+                System.out.println("After factory get! (non-persistent)");
                 this.dynamicMemoryMap.put(key, newEntry);
                 return newEntry;
             }
