@@ -6,6 +6,8 @@ import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
 
+import java.util.function.Supplier;
+
 public class BotMemory
 {
     private final DB persistentDB;
@@ -44,24 +46,33 @@ public class BotMemory
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Entry<T> getOrDefault(String key, T defaultValue, boolean isPersistent)
+    public <T> Entry<T> getOrDefault(String key, Supplier<T> defaultFactory, boolean isPersistent)
     {
+        Entry<?> entry;
         if (isPersistent) {
-            Entry<?> entry = this.persistentMemoryMap.get(key);
+            entry = this.persistentMemoryMap.get(key);
             if (entry == null) {
-                Entry<T> newEntry = new Entry<>(defaultValue);
+                Entry<T> newEntry = new Entry<>(defaultFactory.get());
                 this.persistentMemoryMap.put(key, newEntry);
                 return newEntry;
             }
-            return (Entry<T>)entry;
         } else {
-            Entry<?> entry = this.dynamicMemoryMap.get(key);
+            entry = this.dynamicMemoryMap.get(key);
             if (entry == null) {
-                Entry<T> newEntry = new Entry<>(defaultValue);
+                Entry<T> newEntry = new Entry<>(defaultFactory.get());
                 this.dynamicMemoryMap.put(key, newEntry);
                 return newEntry;
             }
-            return (Entry<T>)entry;
+        }
+        return (Entry<T>)entry;
+    }
+
+    public <T> void updateEntry(String key, Entry<T> entryToUpdate, boolean isPersistent)
+    {
+        if (isPersistent) {
+            this.persistentMemoryMap.put(key, entryToUpdate);
+        } else {
+            this.dynamicMemoryMap.put(key, entryToUpdate);
         }
     }
 
