@@ -13,6 +13,14 @@ import java.io.InputStreamReader;
 
 public class BotEntryPoint
 {
+    /**
+     * The main function for the bot, an "info.json" file with "main-class" key-value pair must be included in the jar resources
+     *
+     * This method will first load the specified bot class, initialize the memory, login to discord using a abstract builder function {@link BotMainClass#buildClient()}
+     * and call {@link BotMainClass#initBot(GatewayDiscordClient) initBot} which is where you would usually subscribe to all the events
+     *
+     * @param args
+     */
     public static void main(String[] args)
     {
         InputStream configFileStream;
@@ -54,20 +62,11 @@ public class BotEntryPoint
             return;
         }
 
+        BotMemory.initMemory(botMain);
+
         GatewayDiscordClient client = botMain.buildClient().block();
 
-        BotMemory.initMemory(botMain);
         botMain.initBot(client);
-
-//        client.on(ReadyEvent.class)
-//                .flatMap(event -> Mono.fromRunnable(() -> {
-//                    User self = event.getSelf();
-//                    ServerManager.GetInstance().GetLogger().info("Logged in as {}#{}", self.getUsername(), self.getDiscriminator());
-//                    //System.out.println(String.format("Logged in as %s#%s", self.getUsername(), self.getDiscriminator()));
-//                    //client.updatePresence(Presence.online(Activity.listening("\n\"st!help\""))).subscribe();
-//                }))
-//                .onErrorResume(throwable -> Mono.fromRunnable(() -> System.out.println(throwable.getMessage())))
-//                .subscribe();
 
         client.onDisconnect().block();
     }
