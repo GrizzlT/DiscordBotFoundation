@@ -4,9 +4,11 @@ import net.openhft.chronicle.bytes.BytesIn;
 import net.openhft.chronicle.bytes.BytesMarshallable;
 import net.openhft.chronicle.bytes.BytesOut;
 import net.openhft.chronicle.core.io.IORuntimeException;
+import net.openhft.chronicle.values.Values;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
+import java.util.Arrays;
 
 public class Entry<T extends BytesMarshallable> implements BytesMarshallable
 {
@@ -37,8 +39,9 @@ public class Entry<T extends BytesMarshallable> implements BytesMarshallable
     {
         try
         {
-            Class<? extends BytesMarshallable> valueClass = (Class<? extends BytesMarshallable>)Class.forName(bytes.readUtf8());
-            valueClass.cast(this.value).readMarshallable(bytes);
+            Class<? extends BytesMarshallable> valueInterface = (Class<? extends BytesMarshallable>)Class.forName(bytes.readUtf8());
+            Object valueClass = Values.newHeapInstance(valueInterface);
+            this.value = (T)valueClass;
             this.value.readMarshallable(bytes);
         } catch (ClassNotFoundException e)
         {
@@ -47,10 +50,11 @@ public class Entry<T extends BytesMarshallable> implements BytesMarshallable
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void writeMarshallable(BytesOut bytes) throws IllegalStateException, BufferOverflowException, BufferUnderflowException, ArithmeticException
     {
-        bytes.writeUtf8(this.value.getClass().getName());
+        bytes.writeUtf8(((Class<T>)Arrays.stream(this.value.getClass().getGenericInterfaces()).filter(type -> type instanceof Class && BytesMarshallable.class.isAssignableFrom((Class<?>)type)).findFirst().orElseThrow(() -> new IllegalStateException("Class must implement BytesMarshallable at some point!!"))).getName());
         this.value.writeMarshallable(bytes);
     }
 }
