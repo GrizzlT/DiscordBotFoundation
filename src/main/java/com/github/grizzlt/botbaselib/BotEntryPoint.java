@@ -63,6 +63,7 @@ public class BotEntryPoint
         }
 
         BotMemory.initMemory(botMain);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> BotMemory.inst().closeMemoryMap()));
 
         GatewayDiscordClient client = botMain.buildClient().block();
 

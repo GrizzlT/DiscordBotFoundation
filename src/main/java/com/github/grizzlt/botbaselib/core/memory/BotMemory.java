@@ -55,6 +55,11 @@ public class BotMemory
         }
     }
 
+    public void closeMemoryMap()
+    {
+        this.memoryMap.close();
+    }
+
     /**
      * Gets the current value associated with the given key or computes one if none was supported yet
      *
