@@ -3,9 +3,7 @@ package com.github.grizzlt.botbaselib.core.memory;
 import com.github.grizzlt.botbaselib.core.BotMainClass;
 import net.openhft.chronicle.bytes.BytesMarshallable;
 import net.openhft.chronicle.map.ChronicleMap;
-import net.openhft.chronicle.map.ChronicleMapBuilder;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.function.Supplier;
 
@@ -47,15 +45,9 @@ public class BotMemory
     @SuppressWarnings("unchecked")
     private BotMemory(BotMainClass botMainInstance)
     {
-        File dataFile = new File("data/bot-persistent.dat");
-        dataFile.getParentFile().mkdirs();
         try
         {
-            this.memoryMap = ChronicleMapBuilder.of(String.class, (Class<Entry<? extends BytesMarshallable>>)(Class<?>)Entry.class)
-                    .name("name-to-entry-map")
-                    .averageKey("ThisIsAnAverageKey")
-                    .entries(100000)
-                    .createPersistedTo(dataFile);
+            this.memoryMap = botMainInstance.buildChronicleMap();
         } catch (IOException e)
         {
             botMainInstance.getLogger().error("Couldn't create Chronicle map!!\nexiting program...", e);
