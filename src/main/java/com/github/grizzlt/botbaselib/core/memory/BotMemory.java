@@ -91,6 +91,16 @@ public class BotMemory
     }
 
     /**
+     * Determines whether the current key is mapped to a value or not
+     * @param key
+     * @return
+     */
+    public boolean hasKey(String key)
+    {
+        return this.memoryMap.containsKey(key);
+    }
+
+    /**
      * Removes the entry associated with this key
      * @param key
      * @return
