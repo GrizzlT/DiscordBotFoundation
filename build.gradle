@@ -16,7 +16,7 @@ shadowJar {
 }
 
 dependencies {
-    compile 'com.discord4j:discord4j-core:3.2.0-M2'
+    compile 'com.discord4j:discord4j-core:3.1.4'
 
     compile 'ch.qos.logback:logback-classic:1.2.3'
     compile 'net.openhft:chronicle-map:3.21ea41'
