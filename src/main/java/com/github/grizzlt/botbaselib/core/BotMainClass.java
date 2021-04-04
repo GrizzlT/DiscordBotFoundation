@@ -4,6 +4,7 @@ import com.github.grizzlt.botbaselib.core.memory.Entry;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.EventDispatcher;
+import discord4j.gateway.intent.IntentSet;
 import net.openhft.chronicle.bytes.BytesMarshallable;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
@@ -24,6 +25,7 @@ public abstract class BotMainClass
         return DiscordClientBuilder.create(System.getenv("TOKEN"))
                 .build()
                 .gateway()
+                .setEnabledIntents(this.getEnabledIntents())
                 .setEventDispatcher(this.createEventDispatcher())
                 .login();
     }
@@ -58,4 +60,6 @@ public abstract class BotMainClass
                 .eventScheduler(Schedulers.immediate())
                 .build();
     }
+
+    public abstract IntentSet getEnabledIntents();
 }
