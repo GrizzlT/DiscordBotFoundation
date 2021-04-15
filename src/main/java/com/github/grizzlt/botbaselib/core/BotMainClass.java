@@ -18,8 +18,6 @@ import java.io.IOException;
 
 public abstract class BotMainClass
 {
-    protected Logger BOT_LOGGER_DEFAULT = null;
-
     public Mono<GatewayDiscordClient> buildClient()
     {
         return DiscordClientBuilder.create(System.getenv("TOKEN"))
@@ -32,13 +30,9 @@ public abstract class BotMainClass
 
     public abstract void initBot(GatewayDiscordClient client);
 
-    public Logger getLogger()
+    public static Logger getLogger()
     {
-        if (this.BOT_LOGGER_DEFAULT == null)
-        {
-            this.BOT_LOGGER_DEFAULT = LoggerFactory.getLogger("BOT-LOGGER");
-        }
-        return this.BOT_LOGGER_DEFAULT;
+        return  LoggerFactory.getLogger(BotMainClass.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -48,7 +42,7 @@ public abstract class BotMainClass
         dataFile.getParentFile().mkdirs();
         return ChronicleMapBuilder.of(String.class, (Class<Entry<? extends BytesMarshallable>>)(Class<?>)Entry.class)
                 .name("name-to-entry-map")
-                .averageKey("ThisIsAnAverageKey")
+                .averageKey("ThisIsAnAverageKey-703226585490128998")
                 .averageValueSize(32)
                 .entries(100000)
                 .createPersistedTo(dataFile);

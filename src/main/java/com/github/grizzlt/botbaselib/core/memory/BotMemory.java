@@ -20,11 +20,11 @@ public class BotMemory
     {
         if (instance != null)
         {
-            botMainInstance.getLogger().warn("BotMemory is already initialized!!");
+            BotMainClass.getLogger().warn("BotMemory is already initialized!!");
             return;
         }
         instance = new BotMemory(botMainInstance);
-        botMainInstance.getLogger().trace("BotMemory successfully initialized");
+        BotMainClass.getLogger().trace("BotMemory successfully initialized");
     }
 
     /**
@@ -49,7 +49,7 @@ public class BotMemory
             this.memoryMap = botMainInstance.buildChronicleMap();
         } catch (IOException e)
         {
-            botMainInstance.getLogger().error("Couldn't create Chronicle map!!\nexiting program...", e);
+            BotMainClass.getLogger().error("Couldn't create Chronicle map!!\nexiting program...", e);
             System.exit(1);
         }
     }
