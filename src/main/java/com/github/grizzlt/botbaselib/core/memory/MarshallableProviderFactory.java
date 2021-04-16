@@ -1,10 +1,13 @@
 package com.github.grizzlt.botbaselib.core.memory;
 
+import com.github.grizzlt.botbaselib.core.BotMainClass;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class MarshallableProviderFactory
 {
-    private static Map<Class<? extends IBytesMarshallableProvider>, IBytesMarshallableProvider> iBytesMarshallableProviderCache;
+    private static final Map<Class<? extends IBytesMarshallableProvider>, IBytesMarshallableProvider> iBytesMarshallableProviderCache = new HashMap<>();
 
     public static IBytesMarshallableProvider getProvider(Class<? extends IBytesMarshallableProvider> providerType) throws RuntimeException
     {
@@ -14,7 +17,7 @@ public class MarshallableProviderFactory
                 return providerType.newInstance();
             } catch (InstantiationException | IllegalAccessException e)
             {
-                e.printStackTrace();
+                BotMainClass.getLogger().error("Couldn't instantiate provider class", e);
                 return null;
             }
         });

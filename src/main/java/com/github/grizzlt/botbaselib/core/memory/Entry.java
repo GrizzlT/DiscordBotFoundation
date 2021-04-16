@@ -1,5 +1,6 @@
 package com.github.grizzlt.botbaselib.core.memory;
 
+import com.github.grizzlt.botbaselib.core.BotMainClass;
 import net.openhft.chronicle.bytes.BytesIn;
 import net.openhft.chronicle.bytes.BytesMarshallable;
 import net.openhft.chronicle.bytes.BytesOut;
@@ -50,12 +51,10 @@ public class Entry<T extends BytesMarshallable> implements BytesMarshallable
             this.value.readMarshallable(bytes);
         } catch (ClassNotFoundException e)
         {
-            System.out.println("Couldn't deserialize memory entry");
-            e.printStackTrace();
+            BotMainClass.getLogger().error("Couldn't deserialize memory entry!", e);
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void writeMarshallable(BytesOut bytes) throws IllegalStateException, BufferOverflowException, BufferUnderflowException, ArithmeticException
     {
