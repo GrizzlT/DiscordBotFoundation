@@ -105,8 +105,9 @@ public class BotMemory
      * @param key
      * @return
      */
-    public void remove(String key)
+    @SuppressWarnings("unchecked")
+    public <T extends BytesMarshallable> Entry<T> remove(String key)
     {
-        this.memoryMap.remove(key);
+        return (Entry<T>)this.memoryMap.remove(key);
     }
 }
