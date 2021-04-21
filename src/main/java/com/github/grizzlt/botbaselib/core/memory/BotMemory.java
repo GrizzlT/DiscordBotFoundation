@@ -3,6 +3,7 @@ package com.github.grizzlt.botbaselib.core.memory;
 import com.github.grizzlt.botbaselib.core.BotMainClass;
 import net.openhft.chronicle.bytes.BytesMarshallable;
 import net.openhft.chronicle.map.ChronicleMap;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -106,6 +107,7 @@ public class BotMemory
      * @return
      */
     @SuppressWarnings("unchecked")
+    @Nullable
     public <T extends BytesMarshallable> Entry<T> remove(String key)
     {
         return (Entry<T>)this.memoryMap.remove(key);
